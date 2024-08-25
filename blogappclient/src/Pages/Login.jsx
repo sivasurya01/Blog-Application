@@ -12,11 +12,11 @@ function Login() {
   const handleonsubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:3000/login`, { email, password })
+      .post(`http://localhost:3000/register/login`, { email, password })
       .then((user) => {
         console.log(user, "sucess");
         if (user.status == 200) {
-          navigate("/user");
+          navigate("/blogs");
         }
       })
       .catch((err) => console.log(err));
