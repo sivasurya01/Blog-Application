@@ -16,15 +16,16 @@ function Blogs() {
     getBlogs();
   }, []);
   const blogDelete = async (id) => {
-    await axios
-      .delete("http://localhost:3000/blog/delete/" + id)
-      .then((res) => {
-        console.log(res), window.location.reload();
-      })
-      .catch((e) => console.log(e));
+    try {
+      const res = await axios.delete("http://localhost:3000/blog/delete/" + id);
+      console.log(res);
+      window.location.reload(); // Corrected reload
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
-    <div className="p-2">
+    <div className="p-2" style={{ overflow: "hidden" }}>
       <div className="mt-4 d-flex justify-content-end">
         <Link to={"/blogaction/add"}>
           <Button>Add Blog</Button>
@@ -38,9 +39,7 @@ function Blogs() {
                 key={index}
                 title={data.title}
                 description={data.description}
-                img={
-                  "https://thumbs.dreamstime.com/b/ontwerp-zonder-titel-327731093.jpg"
-                }
+                img={data.image}
                 id={data._id}
                 blogDelete={blogDelete}
               />

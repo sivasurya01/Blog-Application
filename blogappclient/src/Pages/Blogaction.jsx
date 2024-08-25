@@ -11,12 +11,13 @@ function Blogaction() {
     image: "",
     description: "",
   });
+  const [editdata, setEditData] = useState({});
   console.log(blogdata);
   const getBlogData = async () => {
     await axios
       .get("http://localhost:3000/blog/blog/" + id)
       .then((blog) => {
-        console.log(blog), setBlogData(blog.data);
+        console.log(blog), setEditData(blog.data);
       })
       .catch((e) => console.log(e));
   };
@@ -40,12 +41,15 @@ function Blogaction() {
   const handleUpdeBlog = async (e) => {
     e.preventDefault();
     try {
-      await axios
-        .patch(`http://localhost:3000/blog/update/${id}`, blogdata)
-        .then((res) => {
-          console.log(res), navigate("/blogs");
-        })
-        .catch((e) => console.log(e));
+      console.log("hello");
+      const res = await axios.patch(`http://localhost:3000/blog/update/` + id, {
+        _id: id && id != "add" ? id : editdata._id,
+        title: blogdata.title || editdata.title,
+        image: blogdata.image || editdata.image,
+        description: blogdata.description || editdata.description,
+      });
+      console.log(res.data);
+      navigate("/blogs");
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +63,11 @@ function Blogaction() {
         <Card className="bg-white p-4 mt-4 w-50">
           <Form
             className="mt-6 p-2 "
-            onSubmit={id && id != "add" ? handleUpdeBlog : handleAddBlog}
+            onSubmit={
+              id && id != "add"
+                ? (e) => handleUpdeBlog(e)
+                : (e) => handleAddBlog(e)
+            }
           >
             <Row className="d-flex flex-column justify-content-center align-content-center">
               <Col lg="6">
@@ -72,7 +80,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, title: e.target.value })
                     }
-                    defaultValue={blogdata.title}
+                    defaultValue={editdata.title}
                   />
                 </Form.Group>
               </Col>
@@ -86,7 +94,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, description: e.target.value })
                     }
-                    defaultValue={blogdata.description}
+                    defaultValue={editdata.description}
                   />
                 </Form.Group>
               </Col>
@@ -100,7 +108,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, image: e.target.value })
                     }
-                    defaultValue={blogdata.image}
+                    defaultValue={editdata.image}
                   />
                 </Form.Group>
               </Col>
