@@ -28,18 +28,17 @@ router.get("/blog/:id", (req, res) => {
     .then((users) => res.json(users))
     .catch((err) => console.log(err));
 });
-router.put("/update/:id", (req, res) => {
-  let id = req.params.id;
+router.patch("/update/:id", (req, res) => {
   blogmodel
     .findByIdAndUpdate(
-      { _id: id },
+      { _id: req.body.id },
       {
         title: req.body.title,
         image: req.body.image,
         description: req.body.description,
       }
     )
-    .then((users) => res.json(users))
+    .then((res) => console.log(res))
     .catch((err) => console.log(err));
 });
 router.delete("/delete/:id", async (req, res) => {
