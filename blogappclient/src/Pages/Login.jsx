@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
-
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import InputGroup from "react-bootstrap/InputGroup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,75 +22,84 @@ function Login() {
           navigate("/blogs");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        toast.error("Please Enter Valid Username or Password");
+      });
   };
   return (
     <div>
-      <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
-        <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
-          <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
+      <div>
+        <ToastContainer />
+
+        <div>
+          <h1 className="text-3xl font-semibold text-center text-primary">
             Sign In
           </h1>
-          <form className="mt-6" onSubmit={handleonsubmit}>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold text-gray-800">
-                Email
-              </label>
-              <input
-                type="email"
-                className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-sm font-semibold text-gray-800">
-                Password
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  className="block w-full px-4 py-2 mt-2 text-purple-700 border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                  onChange={(e) => setPassword(e.target.value)}
-                  type={type}
-                  name="password"
-                  required
-                  value={password}
-                />
-                <span className="absolute right-3 top-7 transform -translate-y-1/2">
-                  {type === "password" ? (
-                    <IoEyeOutline
-                      onClick={() => setType("text")}
-                      className="cursor-pointer text-gray-500"
-                    />
-                  ) : (
-                    <IoEyeOffOutline
-                      onClick={() => setType("password")}
-                      className="cursor-pointer text-gray-500"
-                    />
-                  )}
-                </span>
-              </div>
-            </div>
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600"
-              >
-                Login
-              </button>
-            </div>
-            <p className="mt-8 text-xs font-light text-center text-gray-700">
-              {" "}
-              Don't have an account?{" "}
-              <Link
-                to={"/register"}
-                className="font-medium text-purple-600 hover:underline"
-              >
-                Sign up
-              </Link>
-            </p>
-          </form>
+          <div className="d-flex justify-content-center align-items-center">
+            <Card className="bg-white p-4 mt-4 w-50">
+              <Form className="mt-6 p-2 " onSubmit={handleonsubmit}>
+                <Row className="d-flex flex-column justify-content-center align-content-center">
+                  <Col lg="6">
+                    <Form.Group className=" mb-3">
+                      <Form.Label>Email address</Form.Label>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="name@example.com"
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col lg="6">
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup className="mb-3">
+                      <Form.Control
+                        onChange={(e) => setPassword(e.target.value)}
+                        type={type}
+                        name="password"
+                        required
+                        value={password}
+                      />
+                      <InputGroup.Text id="basic-addon1">
+                        {type === "password" ? (
+                          <IoEyeOutline
+                            onClick={() => setType("text")}
+                            className="cursor-pointer text-gray-500"
+                          />
+                        ) : (
+                          <IoEyeOffOutline
+                            onClick={() => setType("password")}
+                            className="cursor-pointer text-gray-500"
+                          />
+                        )}
+                      </InputGroup.Text>
+                    </InputGroup>
+                  </Col>
+                </Row>
+
+                <div className="d-flex justify-content-center mt-6">
+                  <Button
+                    type="submit"
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600"
+                  >
+                    Login
+                  </Button>
+                </div>
+                <p className="mt-2 text-xs font-light text-center text-gray-700">
+                  {" "}
+                  Don't have an account?{" "}
+                  <Link
+                    to={"/register"}
+                    className="font-medium text-purple-600 hover:underline"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </Form>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

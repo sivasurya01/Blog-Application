@@ -1,7 +1,7 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 });
 app.use("/register", require("./controller/user/usercontrol"));
 app.use("/login", require("./controller/user/usercontrol"));
+app.use("/blog", require("./controller/blog/blogcontrol"));
 
 app.listen(3000, () => {
   app.use((req, res, next) => {

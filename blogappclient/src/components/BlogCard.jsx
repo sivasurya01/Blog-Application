@@ -1,17 +1,25 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
-function BlogCard() {
+function BlogCard({ id, img, title, description, blogDelete }) {
   return (
     <Card style={{ width: "18rem" }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      <Card.Img variant="top" src={img} />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>{description}</Card.Text>
+        <div className="d-flex justify-content-end align-items-center gap-2">
+          <Link to={`/blogaction/${id}`}>
+            <CiEdit />
+          </Link>
+          <AiOutlineDelete
+            className="text-danger"
+            onClick={() => blogDelete(id)}
+          />
+        </div>
       </Card.Body>
     </Card>
   );
