@@ -19,7 +19,9 @@ function Blogs() {
     try {
       const res = await axios.delete("http://localhost:3000/blog/delete/" + id);
       console.log(res);
-      window.location.reload(); // Corrected reload
+      if (res.status === 200) {
+        window.location.reload(true); // Only reload if the delete was successful
+      }
     } catch (e) {
       console.log(e);
     }

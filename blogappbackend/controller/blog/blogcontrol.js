@@ -41,10 +41,10 @@ router.patch("/update/:id", (req, res) => {
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
 });
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   try {
     const id = req.params.id;
-    await blogmodel.findByIdAndDelete({ _id: id });
+    blogmodel.findByIdAndDelete({ _id: id });
   } catch (error) {
     console.log(error);
   }

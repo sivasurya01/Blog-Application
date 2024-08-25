@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router";
 
 function Blogaction() {
   const { id } = useParams();
+  const navigate = useNavigate();
   console.log(id);
   const [blogdata, setBlogData] = useState({
     title: "",
@@ -13,6 +14,7 @@ function Blogaction() {
   });
   const [editdata, setEditData] = useState({});
   console.log(blogdata);
+  console.log(editdata, "editdata");
   const getBlogData = async () => {
     await axios
       .get("http://localhost:3000/blog/blog/" + id)
@@ -24,7 +26,6 @@ function Blogaction() {
   useEffect(() => {
     getBlogData();
   }, [id]);
-  const navigate = useNavigate();
   const handleAddBlog = async (e) => {
     e.preventDefault();
     try {
@@ -42,14 +43,16 @@ function Blogaction() {
     e.preventDefault();
     try {
       console.log("hello");
-      const res = await axios.patch(`http://localhost:3000/blog/update/` + id, {
+      const res = await axios.patch("http://localhost:3000/blog/update/" + id, {
         _id: id && id != "add" ? id : editdata._id,
         title: blogdata.title || editdata.title,
         image: blogdata.image || editdata.image,
         description: blogdata.description || editdata.description,
       });
       console.log(res.data);
-      navigate("/blogs");
+      if (res.status === 200) {
+        navigate("/blogs");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +83,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, title: e.target.value })
                     }
-                    defaultValue={editdata.title}
+                    defaultValue={editdata?.title}
                   />
                 </Form.Group>
               </Col>
@@ -94,7 +97,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, description: e.target.value })
                     }
-                    defaultValue={editdata.description}
+                    defaultValue={editdata?.description}
                   />
                 </Form.Group>
               </Col>
@@ -108,7 +111,7 @@ function Blogaction() {
                     onChange={(e) =>
                       setBlogData({ ...blogdata, image: e.target.value })
                     }
-                    defaultValue={editdata.image}
+                    defaultValue={editdata?.image}
                   />
                 </Form.Group>
               </Col>
