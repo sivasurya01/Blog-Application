@@ -31,22 +31,44 @@ router.get("/blog/:id", (req, res) => {
 router.patch("/update/:id", (req, res) => {
   blogmodel
     .findByIdAndUpdate(
-      { _id: req.body.id },
+      req.params.id, // Use req.params.id to get the ID from the URL
       {
         title: req.body.title,
         image: req.body.image,
         description: req.body.description,
-      }
+      },
+      { new: true } // Option to return the updated document
     )
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((updatedBlog) => {
+      if (updatedBlog) {
+        res.status(200).json(updatedBlog);
+      } else {
+        res.status(404).json({ message: "Blog not found" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "An error occurred" });
+    });
 });
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    blogmodel.findByIdAndDelete({ _id: id });
+    const deletedBlog = await blogmodel.findByIdAndDelete(id);
+
+    if (!deletedBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Blog deleted successfully", data: deletedBlog });
   } catch (error) {
     console.log(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the blog" });
   }
 });
+
 module.exports = router;

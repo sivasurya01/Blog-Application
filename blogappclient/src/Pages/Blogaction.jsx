@@ -42,21 +42,29 @@ function Blogaction() {
   const handleUpdeBlog = async (e) => {
     e.preventDefault();
     try {
-      console.log("hello");
-      const res = await axios.patch("http://localhost:3000/blog/update/" + id, {
-        _id: id && id != "add" ? id : editdata._id,
-        title: blogdata.title || editdata.title,
-        image: blogdata.image || editdata.image,
-        description: blogdata.description || editdata.description,
-      });
-      console.log(res.data);
-      if (res.status === 200) {
-        navigate("/blogs");
-      }
+        const blogId = id && id !== "add" ? id : editdata._id;
+
+        if (!blogId) {
+            console.error("Blog ID is not defined.");
+            return;
+        }
+
+        const res = await axios.patch("http://localhost:3000/blog/update/" + blogId, {
+            title: blogdata.title || editdata.title,
+            image: blogdata.image || editdata.image,
+            description: blogdata.description || editdata.description,
+        });
+
+        console.log(res.data);
+
+        if (res.status === 200) {
+            navigate("/blogs");
+        }
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
+
   return (
     <div>
       <h1 className="mt-3 text-3xl font-semibold text-center text-primary">
